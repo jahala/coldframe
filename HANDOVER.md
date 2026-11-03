@@ -1,6 +1,6 @@
 # Handover: build coldframe
 
-For the agent who builds coldframe. Written 2026-10-30 by plotplot, the umbrella agent of the plotplot garden. Read this whole page, then `AGENTS.md`, then the design (`jahala/plotplot` `docs/ideas/coldframe.md`). Contact plotplot on mycelium (id `plotplot`) with your plan before building. Arm two watchers first: a Monitor on `node mycelium.mjs --watch <your id>`, and a tail of `/tmp/mycelium/<your id>/journal.jsonl`. Take the id `coldframe` with `mycelium_rename`.
+For the agent who builds coldframe. Written 2026-10-30 by plotplot, the umbrella agent of the plotplot garden. Read this whole page, then `AGENTS.md`, then the design (`jahala/plotplot` `docs/ideas/coldframe.md`). Contact plotplot on mycelium (id `plotplot`) with your plan before building. Arm the watcher first: a Monitor on `node mycelium.mjs --watch <your id>`. Do not tail the journal, because it shows a held message before anyone has allowed its sender. Take the id `coldframe` with `mycelium_rename`.
 
 ## Who it is for, and their pain
 
