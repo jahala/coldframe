@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>status · coldframe</title>
+<link rel="stylesheet" href="loop.css">
+<body>
+<noscript>This page renders its markdown payload with JavaScript. Enable JavaScript, or read the raw payload in the page source.</noscript>
+<script type="text/markdown" id="loop">
+# status: one answer to whether CI on this Mac is healthy
+**Goal.** `coldframe status` names every runner folder on the machine with its repository, whether it is online, busy or idle, the hooks it runs and its disk use, and the last prune. It exits 0 when healthy, 1 when not, and 3 when it could not read what it needs, so a failure to read is never reported as healthy. Only an unhealthy status sends a notification.
+
+## Tests
+- [ ] (code) on copies of real runner folders, credentials left out, status reads each one's repository, hooks, version and disk, a `.runner` that starts with a byte-order mark and a `bin` that is a real folder included · tests/status.rs · reads: tests/fixtures/runners/
+- [ ] (code) a copied runner folder with no `Runner.Listener` for it reads as offline and status exits 1; with a real process standing in as its listener, it reads as online and status exits 0 · tests/status.rs
+- [ ] (code) a runner folder status cannot read makes it exit 3, never 0 or 1 · tests/status.rs
+- [ ] (human) on the owner's Mac, status names every runner folder there is, and its online, busy and idle states match the runners' own service list
+
+## For
+- #the-self-hoster
+
+## Tried
+- 2026-11-05 read at $0 on the owner's Mac: 31 runner folders for 17 repositories, 39 GB in all. `.runner` starts with a UTF-8 byte-order mark; `bin` and `externals` are links only on the 5 runners that updated themselves; every runner also holds `.runner_migrated`; folder names are lowercased while service labels keep GitHub's case, and one folder has no number
+</script>
+<script src="loop.js"></script>

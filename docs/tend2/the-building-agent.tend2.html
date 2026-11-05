@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>the-building-agent · coldframe</title>
+<link rel="stylesheet" href="loop.css">
+<body>
+<noscript>This page renders its markdown payload with JavaScript. Enable JavaScript, or read the raw payload in the page source.</noscript>
+<script type="text/markdown" id="loop">
+# the building agent: told to run the tests, on a machine it shares with everyone
+**Who.** An agent that has just changed a project and must say whether the change holds before it reports done. It runs on the owner's Mac beside other agents and a dozen CI jobs, it does not know the project's test tiers by heart, and it is tempted to call a timing failure flaky and run the suite again.
+
+It is the middle of a busy afternoon. The agent runs the whole suite because it cannot tell which tests its change touches. Two tests fail on a timeout that passed this morning, and the run leaves a server process and a temporary folder behind, which the next agent's run trips over.
+
+## Jobs
+- When I have changed some files, I want to run only the test tiers they touch, so I can report a verdict without running everything every time · from the owner's test rule "run only the tests a change touches; when unsure, run everything"
+- When a run fails because it left a file, a process or a container behind, I want the report to name the leak, so I can fix it rather than retry · from the six per-project leftover checks found on 2026-10-30
+- When the machine is loaded, I want my run to wait its turn rather than fail on timing, so a red result means my change broke something · from the CI review of 2026-10-29
+</script>
+<script src="loop.js"></script>

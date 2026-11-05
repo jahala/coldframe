@@ -52,7 +52,7 @@ Every bar includes a control: a comparison the result must beat, never a count a
   - the project page carries Who, Pain, prose and a current goal;
   - one loop page per capability family A to E, each capability with its state, first test, bar and control.
 
-  Lint it with tend2 built from `jahala/tend` at commit `c17ed38` in a temporary folder. Never use the global `tend2`.
+  Lint it with the installed `tend2` (`tend2 lint --strict docs/tend2`). CI pins the same tend commit (`docs/decisions.md` 8).
 - **`garden.json`** grows from `kind ["repository"]` to a bed's manifest when the first command ships.
 
 ## Open questions only the owner can answer

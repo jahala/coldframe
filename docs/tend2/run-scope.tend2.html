@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>run-scope · coldframe</title>
+<link rel="stylesheet" href="loop.css">
+<body>
+<noscript>This page renders its markdown payload with JavaScript. Enable JavaScript, or read the raw payload in the page source.</noscript>
+<script type="text/markdown" id="loop">
+# run-scope: a run leaves nothing behind, written once
+**Goal.** `coldframe run -- <command>` runs a command inside a scope it opens: its own temporary folder, and a record of what it started. Afterwards it reports any file outside the scope, any process still alive and any container or image left, removes what it made, and fails the run when anything leaked. It replaces the six separate designs of "a run leaves nothing behind".
+
+## Tests
+- [ ] (code) a stray file, a live child process and a leftover container, each planted once in a copy of mull, are each reported and fail the run, while a clean run passes · tests/run_scope.rs
+- [ ] (code) on files, coldframe's verdict matches mull's own leftover check, run for run, on the same planted and clean runs · tests/run_scope.rs
+- [ ] (code) the scope removes the temporary folder it made, and stops the processes it started by the ids it recorded, never by name · tests/run_scope.rs
+- [ ] (human) for processes and containers, the known case is the owner's private project whose own end-of-run check sees them, or, if none does, the planted leaks alone, recorded as weaker evidence
+
+## For
+- #the-building-agent
+- #the-self-hoster
+
+## Tried
+- 2026-11-05 plotplot's ruling: files are proved against mull's check, and graft is replaced, since it has no end-of-run check (docs/decisions.md 2)
+- 2026-11-05 neither mull nor graft reads a port range; both ask the system for a free port, so the scope proves its temporary folder, and a port range waits for a project that reads one
+- 2026-11-05 kill criterion, from the design: if the scope misses a planted leak or flags a clean run, the projects keep their own checks and the run scope is dropped
+</script>
+<script src="loop.js"></script>

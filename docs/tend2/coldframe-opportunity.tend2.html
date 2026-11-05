@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>coldframe-opportunity · coldframe</title>
+<link rel="stylesheet" href="loop.css">
+<body>
+<noscript>This page renders its markdown payload with JavaScript. Enable JavaScript, or read the raw payload in the page source.</noscript>
+<script type="text/markdown" id="loop">
+# coldframe-opportunity: every project rebuilt the same bench, and none of it bounds the machine
+**Pain.** Each project rebuilt the same CI machinery on the owner's Mac, and none of it bounds the machine as a whole. On 2026-10-29, 29 runners on an 18-core Mac held 35 GB, 6.5 GB of it logs and old runner versions nothing removed. One project's heavy jobs queued about 10 minutes and waited up to 19 more for a quiet machine, to run 3 to 6 minutes of tests. Paid minutes stopped CI twice. "A run leaves nothing behind" existed in six separate designs, and most of the owner's test rules had nothing checking them.
+
+## Signals
+- metric: paid CI minutes per month, target $0
+- metric: the 90th-percentile wait of the slowest repository's heavy jobs, queued and waiting for a quiet machine
+- metric: runner disk growth per week, logs and superseded runner versions included
+- metric: the count of per-project "leave nothing behind" and "quiet machine" mechanisms, target one
+- risk: paid minutes run out mid-month and CI stops, as it did in September and October 2026
+
+## Why it persists
+Each project fixes what hurts it, inside its own repository, so the fixes multiply and none of them sees the whole machine. GitHub's runner never removes its own logs or old versions. CI jobs and agents' local test runs share one Mac with nothing bounding their total load, and no tool owns "a run leaves nothing behind" for more than one project.
+
+## Solved by
+- #coldframe
+</script>
+<script src="loop.js"></script>

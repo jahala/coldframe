@@ -17,6 +17,9 @@ fn placeholder_markers() -> [String; 5] {
     ]
 }
 
+/// tend2's renderer, copied beside the map as tend2 writes it. Its prose is tend2's.
+const VENDORED: [&str; 2] = ["docs/tend2/loop.css", "docs/tend2/loop.js"];
+
 fn em_dashes(text: &str) -> bool {
     text.contains('\u{2014}')
 }
@@ -90,6 +93,7 @@ fn no_file_this_repository_wrote_carries_an_em_dash() {
     assert!(!files.is_empty(), "git listed no files");
     let offenders: Vec<&String> = files
         .iter()
+        .filter(|path| !VENDORED.contains(&path.as_str()))
         .filter(|path| fs::read(path).is_ok_and(|b| em_dashes(&String::from_utf8_lossy(&b))))
         .collect();
     assert_eq!(offenders, Vec::<&String>::new());
