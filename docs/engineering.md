@@ -48,6 +48,7 @@ This table is the one home for which check holds each rule. "Nothing yet" names 
 | The core page within 150 lines, a one-line `CLAUDE.md`, and every cited path resolves (the garden's fit check F7) | `tests/references.rs` | held |
 | Every CI job runs on the owner's runners with the way back, the TMPDIR step first, and actions pinned to a commit (`AGENTS.md`, "How work lands") | `tests/workflow.rs` | held |
 | Usage errors exit 2 and write nothing (`docs/architecture.md`, "Exit codes") | `tests/cli.rs` | held |
+| The README's examples run and print what they show (`README.md`) | `tests/readme.rs` | held |
 | A run leaves nothing behind, even when killed | `scripts/test.sh` and `scripts/hygiene.sh` | held |
 | Every CI job is green before a merge (`AGENTS.md`, "How work lands") | the merge runs only after the check watch, in one `&&` chain (the garden's law); GitHub offers no branch rule for a private repository on this plan | held by procedure only |
 
