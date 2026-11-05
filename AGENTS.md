@@ -47,7 +47,7 @@ The suite runs in under a second, so every change runs all of it. A changed-only
 | The main line after each merge | the same as every pull request, on the push to master | everything | |
 | A release | none yet: the owner tags, then `cargo install --locked --git` at the tag on a clean machine | | |
 
-Measured 2026-11-05 on the owner's Mac (18 cores, load average 9 to 18 from other work): 20 runs of the suite and 5 of the killed run, then the same with 18 busy loops added. None failed. CI's time from push to verdict is not measured yet, because coldframe has no runner. CI also runs `cargo fmt --check`, `cargo clippy --locked --all-targets -- -D warnings` and `shellcheck scripts/*.sh` (`docs/engineering.md`, "Where CI runs"). The Rust version is `rust-toolchain.toml`, which CI and every checkout read.
+Measured 2026-11-05 on the owner's Mac (18 cores, load average 9 to 18 from other work): 20 runs of the suite and 5 of the killed run, then the same with 18 busy loops added. None failed. CI's time from push to verdict was about 30 s on GitHub's hosted macOS runner (pull request 1, 2026-11-05: 23 s running, with no queue). CI also runs `cargo fmt --check`, `cargo clippy --locked --all-targets -- -D warnings` and `shellcheck scripts/*.sh` (`docs/engineering.md`, "Where CI runs"). The Rust version is `rust-toolchain.toml`, which CI and every checkout read.
 
 ## Hard limits
 

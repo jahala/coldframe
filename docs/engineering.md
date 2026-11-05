@@ -51,7 +51,7 @@ This table is the one home for which check holds each rule. "Nothing yet" names 
 | Usage errors exit 2 and write nothing (`docs/architecture.md`, "Exit codes") | `tests/cli.rs` | held |
 | The README's examples run and print what they show (`README.md`) | `tests/readme.rs` | held |
 | A run leaves nothing behind, even when killed | `scripts/test.sh` and `scripts/hygiene.sh` | held |
-| Every CI job is green before a merge (`AGENTS.md`, "How work lands") | a branch rule on master requiring the `check` job, once the repository is public | nothing yet: set when it goes public |
+| Every CI job is green before a merge (`AGENTS.md`, "How work lands") | a branch rule on master: the `check` job must pass on the change merged with the latest master, for the owner too, and master takes no force-push or deletion | held, since 2026-11-05 |
 
 ## Where CI runs
 
