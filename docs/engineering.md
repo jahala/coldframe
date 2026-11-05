@@ -74,7 +74,7 @@ Each job's time limit is 60 minutes, though both run in under a minute. The limi
 
 `index.html` is coldframe's GitHub Pages site, served from master at the repository's root. It is a copy of plotplot's bed page, `jahala/plotplot:.brand/reference/product.html`, at the brand version `.petalsrc` pins, with only the reference's swap spots changed.
 
-- `.brand/products/coldframe/` is coldframe's own brand layer: its mark, which is also the favicon. It is committed. The rest of the brand folder is fetched with petals' fetch script, `jahala/plotplot:petals/scripts/fetch-brand.sh`, and ignored by git.
+- `.brand/products/coldframe/` is coldframe's own brand layer: its mark, which is also the favicon. It is committed. The empty `.nojekyll` at the root makes Pages serve files as they are, since Jekyll would skip the dot folder and the favicon with it. The rest of the brand folder is fetched with petals' fetch script, `jahala/plotplot:petals/scripts/fetch-brand.sh`, and ignored by git.
 - `tests/page.rs` holds what only coldframe can know. The hero terminal is a real run of the binary. The proof band's four numbers are recounted at the commit the band names. The page loads the brand's three fonts and nothing else, and links only public addresses.
 - The `page` job in CI holds the rest, with petals' check (colours, type, layout, surface, voice) and the marks check, at the pinned brand version.
 - When the counts change, update the proof band to a new commit's numbers, and `tests/page.rs` checks them there.

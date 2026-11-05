@@ -286,6 +286,24 @@ fn the_page_loads_the_three_brand_fonts_and_nothing_else() {
 }
 
 #[test]
+fn the_favicon_is_a_file_the_site_serves() {
+    let page = page();
+    let icon = between(&page, "<link rel=\"icon\" href=\"", "\"").expect("no favicon");
+    assert!(
+        std::path::Path::new(icon).is_file(),
+        "the favicon {icon} is not in the repository"
+    );
+    // GitHub Pages runs Jekyll unless .nojekyll exists, and Jekyll skips every path with a
+    // part that starts with a dot, such as .brand/.
+    if icon.split('/').any(|part| part.starts_with('.')) {
+        assert!(
+            std::path::Path::new(".nojekyll").is_file(),
+            "{icon} sits in a dot folder, which Pages skips without .nojekyll"
+        );
+    }
+}
+
+#[test]
 fn every_outside_link_is_a_public_address() {
     let private: Vec<String> = addresses(&page())
         .into_iter()
