@@ -20,10 +20,13 @@ jobs:
   # nothing after the next one.
   check:
     runs-on: macos-latest
-    timeout-minutes: 15
+    timeout-minutes: 60
     steps:
       - run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
+      # The whole history: tests/page.rs recounts the page's proof band at the commit it names.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
       # rust-toolchain.toml names the version; with no argument rustup installs that one.
       - run: rustup toolchain install
       - run: cargo fmt --check
@@ -39,3 +42,25 @@ jobs:
       - run: shellcheck scripts/*.sh
       - run: scripts/test.sh
       - run: scripts/hygiene.sh
+
+  # The project page against the brand: petals' check (colours, type, layout, surface, voice)
+  # and the marks check, with petals and the brand from jahala/plotplot at the tag .petalsrc
+  # pins. coldframe's own committed layer, .brand/products/coldframe/, is laid over the fetched
+  # brand, so the check reads the layer this repository ships.
+  page:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: jahala/plotplot
+          ref: ce4d307b06a91add01dc7299bca852e32a264694 # v1.10.0, the version .petalsrc pins
+          path: .plotplot
+      - name: Fetch the brand and lay coldframe's layer over it
+        run: |
+          bash .plotplot/petals/scripts/fetch-brand.sh "$PWD/.plotplot" --target "$RUNNER_TEMP/brand"
+          cp -R .brand/products/coldframe/. "$RUNNER_TEMP/brand/products/coldframe/"
+      - run: bash .plotplot/petals/scripts/check.sh index.html --brand "$RUNNER_TEMP/brand" --product coldframe
+      - run: python3 .plotplot/petals/scripts/marks.py --check --brand "$RUNNER_TEMP/brand"

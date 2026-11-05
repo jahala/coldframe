@@ -50,19 +50,35 @@ This table is the one home for which check holds each rule. "Nothing yet" names 
 | No path on the owner's machine and no name of a private project in any file (`AGENTS.md`, "How work lands") | `tests/public.rs`, which keeps the names only as hashes | held for files; commit messages were checked once, on 2026-11-05, and nothing holds them yet |
 | Usage errors exit 2 and write nothing (`docs/architecture.md`, "Exit codes") | `tests/cli.rs` | held |
 | The README's examples run and print what they show (`README.md`) | `tests/readme.rs` | held |
+| The project page shows a real run, true numbers, the brand's fonts and public links only (`docs/engineering.md`, "The project page") | `tests/page.rs` | held |
+| The project page keeps the brand's colours, type, layout, surface, voice and mark | the `page` job in CI, with petals' check and the marks check | held |
 | A run leaves nothing behind, even when killed | `scripts/test.sh` and `scripts/hygiene.sh` | held |
 | Every CI job is green before a merge (`AGENTS.md`, "How work lands") | a branch rule on master: the `check` job must pass on the change merged with the latest master, for the owner too, and master takes no force-push or deletion | held, since 2026-11-05 |
 
 ## Where CI runs
 
-`.github/workflows/ci.yml` runs one job on GitHub's hosted macOS runners. The repository is public, so those cost nothing, and it never runs on a runner on the owner's Mac, where a stranger's pull request would run code as the owner. macOS, because coldframe reads macOS runner folders and LaunchAgents. On a pull request the checkout is the change merged into master, so the checks run on what the merge would make.
+`.github/workflows/ci.yml` runs two jobs on GitHub's hosted macOS runners. The repository is public, so those cost nothing, and it never runs on a runner on the owner's Mac, where a stranger's pull request would run code as the owner. macOS, because coldframe reads macOS runner folders and LaunchAgents. On a pull request the checkout is the change merged into master, so the checks run on what the merge would make.
 
-The job runs, in order, stopping at the first failure:
+The `check` job runs, in order, stopping at the first failure:
 1. `cargo fmt --check`
 2. `cargo clippy --locked --all-targets -- -D warnings`
 3. `shellcheck scripts/*.sh`, with shellcheck 0.11.0 installed first and checked against its SHA-256, because GitHub's macOS image has none
 4. `scripts/test.sh`
 5. `scripts/hygiene.sh`
+
+The `page` job checks the project page against the brand (below, "The project page").
+
+Each job's time limit is 60 minutes, though both run in under a minute. The limit only catches a hang. On 2026-11-05 a 15-minute limit cancelled a run that was still waiting for a free runner, so the wait for a runner counts against it.
+
+## The project page
+
+`index.html` is coldframe's GitHub Pages site, served from master at the repository's root. It is a copy of plotplot's bed page, `jahala/plotplot:.brand/reference/product.html`, at the brand version `.petalsrc` pins, with only the reference's swap spots changed.
+
+- `.brand/products/coldframe/` is coldframe's own brand layer: its mark, which is also the favicon. It is committed. The rest of the brand folder is fetched with petals' fetch script, `jahala/plotplot:petals/scripts/fetch-brand.sh`, and ignored by git.
+- `tests/page.rs` holds what only coldframe can know. The hero terminal is a real run of the binary. The proof band's four numbers are recounted at the commit the band names. The page loads the brand's three fonts and nothing else, and links only public addresses.
+- The `page` job in CI holds the rest, with petals' check (colours, type, layout, surface, voice) and the marks check, at the pinned brand version.
+- When the counts change, update the proof band to a new commit's numbers, and `tests/page.rs` checks them there.
+- plotplot-design opens the page in the owner's browser, and the owner signs off on its looks before it ships.
 
 ## Recipes
 

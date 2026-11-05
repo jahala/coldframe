@@ -1,3 +1,10 @@
 target/
 .coldframe/
 .DS_Store
+
+# The umbrella's brand files arrive with a petals fetch and belong to the umbrella.
+# coldframe's own product layer, .brand/products/coldframe/, is committed.
+/.brand/*
+!/.brand/products/
+/.brand/products/*
+!/.brand/products/coldframe/
