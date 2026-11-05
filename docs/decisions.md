@@ -12,6 +12,8 @@ Each decision with its context, what was chosen and why. Numbered in order, neve
 
 ## 3. The started-hook spike runs on coldframe's own runner
 
+Replaced by decision 7: a public repository gets no runner on the owner's Mac.
+
 2026-11-05. The design put the spike on a runner of a quiet private repository. Running it on coldframe's own runner changes no other repository or workflow. plotplot agreed, on the condition that the spike records whether the hook can see the job's labels, because that decides how slots read a job's weight.
 
 ## 4. `audit` becomes `survey`, and `runner adopt` stays
@@ -24,4 +26,13 @@ Each decision with its context, what was chosen and why. Numbered in order, neve
 
 ## 6. A killed test run is cleaned by the next run, through the Trash
 
-2026-11-05. A run killed outright cannot remove its own temporary folder. The next run of `scripts/test.sh` moves the folder of any earlier run whose process is gone to the Trash. It uses `trash`, not `rm`, because the folder is not one that run made itself, and the hard limit allows `rm` only for that. `scripts/hygiene.sh` kills a run part-way to prove it, in CI as well. If `trash` fails in a runner's session, that check fails loudly, and this decision is revisited. The cost: each run of the check, in CI too, adds one small folder to the owner's Trash, and Finder's 30-day setting is off, so nothing removes it. The owner's answer to open question 1 in `docs/build-plan.md` settles this as well.
+2026-11-05. A run killed outright cannot remove its own temporary folder. The next run of `scripts/test.sh` moves the folder of any earlier run whose process is gone to the Trash. It uses `trash`, not `rm`, because the folder is not one that run made itself, and the hard limit allows `rm` only for that. `scripts/hygiene.sh` kills a run part-way to prove it, in CI as well. If `trash` fails in a runner's session, that check fails loudly, and this decision is revisited. The cost: each run of the check on the owner's Mac adds one small folder to the owner's Trash (CI's hosted runners are thrown away after each job), and Finder's 30-day setting is off, so nothing removes it. The owner's answer to open question 1 in `docs/build-plan.md` settles this as well.
+
+## 7. coldframe is public, from a clean history, and its CI runs on GitHub
+
+2026-11-05. The owner chose to publish coldframe before building, so its CI runs on GitHub's hosted macOS runners at no cost, and none of it on the owner's Mac. That reverses the choice of 2026-11-03 to keep it private.
+
+- **A new repository, not a rewritten one.** The old history carried paths on the owner's machine and details of private projects. GitHub keeps every pull request's commits under refs nobody can delete, so rewriting master would not remove them, and force-pushing is a hard limit besides. The old repository is renamed jahala/coldframe-notes and stays private, with its whole history and pull requests. A new jahala/coldframe starts from the same commits, rewritten with the research copies removed and private names and paths replaced.
+- **Nothing private in the public repository.** `tests/public.rs` fails on a path on the owner's machine or the name of a private project. Evidence about the owner's machine goes to the notes repository.
+- **CI never runs on the owner's Mac.** `tests/workflow.rs` refuses a self-hosted runner, so guardrail 6 holds for coldframe itself.
+- **What it costs.** The started-hook spike (step 0b) needs a self-hosted runner, and cannot use coldframe's own. It moves to the private notes repository, which plotplot is asked to confirm.

@@ -36,7 +36,10 @@ fn the_reader_finds_each_example_and_its_output() {
     assert_eq!(
         examples(readme),
         [
-            (vec!["--version".to_string()], "coldframe 9.9.9\n".to_string()),
+            (
+                vec!["--version".to_string()],
+                "coldframe 9.9.9\n".to_string()
+            ),
             (vec!["--help".to_string()], "usage\n".to_string()),
         ]
     );
@@ -52,6 +55,10 @@ fn every_example_in_the_readme_prints_what_it_shows() {
             .args(&args)
             .output()
             .expect("coldframe runs");
-        assert_eq!(String::from_utf8_lossy(&out.stdout), shown, "coldframe {args:?}");
+        assert_eq!(
+            String::from_utf8_lossy(&out.stdout),
+            shown,
+            "coldframe {args:?}"
+        );
     }
 }

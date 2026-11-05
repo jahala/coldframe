@@ -46,15 +46,16 @@ This table is the one home for which check holds each rule. "Nothing yet" names 
 | Work only in this repository | nothing | nothing yet |
 | The core does no I/O (`docs/architecture.md`, "Shape") | `tests/shape.rs` | held |
 | The core page within 150 lines, a one-line `CLAUDE.md`, and every cited path resolves (the garden's fit check F7) | `tests/references.rs` | held |
-| Every CI job runs on the owner's runners with the way back, the TMPDIR step first, and actions pinned to a commit (`AGENTS.md`, "How work lands") | `tests/workflow.rs` | held |
+| Every CI job runs on GitHub's hosted macOS runners and never on a self-hosted one, the TMPDIR step first, and actions pinned to a commit (`AGENTS.md`, "How work lands") | `tests/workflow.rs` | held |
+| No path on the owner's machine and no name of a private project in any file (`AGENTS.md`, "How work lands") | `tests/public.rs`, which keeps the names only as hashes | held for files; commit messages were checked once, on 2026-11-05, and nothing holds them yet |
 | Usage errors exit 2 and write nothing (`docs/architecture.md`, "Exit codes") | `tests/cli.rs` | held |
 | The README's examples run and print what they show (`README.md`) | `tests/readme.rs` | held |
 | A run leaves nothing behind, even when killed | `scripts/test.sh` and `scripts/hygiene.sh` | held |
-| Every CI job is green before a merge (`AGENTS.md`, "How work lands") | the merge runs only after the check watch, in one `&&` chain (the garden's law); GitHub offers no branch rule for a private repository on this plan | held by procedure only |
+| Every CI job is green before a merge (`AGENTS.md`, "How work lands") | a branch rule on master requiring the `check` job, once the repository is public | nothing yet: set when it goes public |
 
 ## Where CI runs
 
-`.github/workflows/ci.yml` runs one job on self-hosted runners on the owner's Mac, labelled `coldframe`. This repository is private, so hosted jobs would draw on the owner's monthly minutes. Setting the repository variable `CI_RUNS_ON` to `"ubuntu-latest"`, with the quotes, moves the job back to GitHub's runners with no edit. On a pull request the checkout is the change merged into master, so the checks run on what the merge would make.
+`.github/workflows/ci.yml` runs one job on GitHub's hosted macOS runners. The repository is public, so those cost nothing, and it never runs on a runner on the owner's Mac, where a stranger's pull request would run code as the owner. macOS, because coldframe reads macOS runner folders and LaunchAgents. On a pull request the checkout is the change merged into master, so the checks run on what the merge would make.
 
 The job runs, in order, stopping at the first failure:
 1. `cargo fmt --check`

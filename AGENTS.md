@@ -57,8 +57,10 @@ Measured 2026-11-05 on the owner's Mac (18 cores, load average 9 to 18 from othe
 - No em dashes in prose.
 - No mocks, stubs, TODOs, fallbacks or shims without the owner's word. Never delete or skip a failing test.
 - Name no competing product in the repository's prose.
-- Work only in this repository. Changes in another bed go to that bed's owner, through plotplot (the umbrella agent) on mycelium.
+- Work only in this repository and its private notes repository. Changes in another bed go to that bed's owner, through plotplot (the umbrella agent) on mycelium.
 
 ## How work lands
 
-Every change is a branch and a pull request, a failing test first, every CI job green, then a merge. This repository is private, so its hosted jobs draw on the owner's monthly GitHub minutes, and GitHub refuses them once those run out. Its CI runs on self-hosted runners on the owner's Mac labelled `coldframe`, with `runs-on: ${{ fromJSON(vars.CI_RUNS_ON || '["self-hosted", "macOS", "coldframe"]') }}` and the TMPDIR step, exactly as graft's and well's CI do. Ask plotplot to set the runners up when your first workflow is ready. The owner decides if and when it goes public.
+Every change is a branch and a pull request, a failing test first, every CI job green, then a merge. This repository is public, so its CI runs on GitHub's hosted macOS runners, which cost nothing for a public repository. It never gets a runner on the owner's Mac: a stranger's pull request would run code there (guardrail 6). `tests/workflow.rs` holds this.
+
+Nothing private goes in this repository: no path on the owner's machine, and no name of the owner's private projects (`tests/public.rs`). The garden's own tools may be named, as the public umbrella names them. Evidence about the owner's machine and repositories (the research copies, measure reports, spike notes) goes to the private notes repository, jahala/coldframe-notes.

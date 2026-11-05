@@ -9,17 +9,18 @@ on:
 permissions:
   contents: read
 
-# Jobs run on self-hosted runners on the owner's Mac (docs/engineering.md, "Where CI runs").
-# Setting the repository variable CI_RUNS_ON to "ubuntu-latest", with the quotes, moves them
-# back to GitHub's runners with no edit. On a pull request, the checkout is the change merged
-# into master, so the checks run on what the merge would make.
+# The repository is public, so every job runs on GitHub's hosted macOS runners, which are
+# free for public repositories, and never on a runner on the owner's machine
+# (docs/engineering.md, "Where CI runs"). On a pull request, the checkout is the change
+# merged into master, so the checks run on what the merge would make.
 
 jobs:
   # Format, lints, the scripts' checker, the suite through scripts/test.sh, which fails when a
   # run leaves anything behind, then scripts/hygiene.sh, which proves a killed run leaves
   # nothing after the next one.
   check:
-    runs-on: ${{ fromJSON(vars.CI_RUNS_ON || '["self-hosted", "macOS", "coldframe"]') }}
+    runs-on: macos-latest
+    timeout-minutes: 15
     steps:
       - run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

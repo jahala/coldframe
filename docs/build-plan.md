@@ -32,7 +32,7 @@ Facts that weaken the design's bars (plotplot ruled on these, `docs/decisions.md
 | Step | Slices | Needs first |
 |---|---|---|
 | F. Foundations | F1 the crate and the law's checks · F2 the tend2 map | nothing |
-| 0. Measure and spike | 0a `measure` script and report · 0b started-hook spike | F1's CI on coldframe's own runner (plotplot sets it up) |
+| 0. Measure and spike | 0a `measure` script and report · 0b started-hook spike | F1; 0b needs a runner on the private notes repository |
 | 1. Lifetimes and health | 1a `status`, first cut · 1b `prune --dry-run` · 1c `prune` · 1d `runner adopt` and `hook completed` | F1; it does not wait on step 0 |
 | 2. Run scope | 2a files · 2b processes · 2c containers · 2d the proof on graft and mull | step 1 |
 | 3. Under load | 3a `run --load` and its proof | step 2 |
@@ -56,7 +56,7 @@ The testing doctrine in `docs/engineering.md` binds every slice: the failing tes
 - `scripts/test.sh`, which fails a run that leaves anything behind, and `scripts/hygiene.sh`, which proves a killed run leaves nothing after the next one;
 - `.github/workflows/ci.yml`, on the owner's runners with the way back to hosted ones.
 
-Then plotplot sets up coldframe's runner.
+CI runs on GitHub's hosted macOS runners, because the repository is public (`docs/decisions.md` 7).
 
 **F2. The tend2 map.** `docs/tend2/coldframe.tend2.html` carries Who, Pain, prose and the current goal. Five family pages, one each for A to E, carry the capability table (id, capability, state, first test, bar, control, page). CI lints it with tend2 built from `jahala/tend` at `c17ed38` in a temporary folder.
 - First test: a check that every capability carries a state, a first test, a bar and a control, and that no id repeats. graft's `scripts/checks/capabilities.sh` is the model.
@@ -70,7 +70,7 @@ Then plotplot sets up coldframe's runner.
 - Output: `jahala/coldframe-notes:docs/research/measure-<date>.md`, private because it names the owner's repositories, with the kill-criterion answer. Slots are dropped if CI ran above the cap (6 jobs, a third of the cores) in under 5 percent of busy minutes. A busy minute is one with at least one job running.
 - The script's raw answers for 3 repositories over 3 days are kept as a fixture. When `measure` moves into the binary, its Rust test must give the script's answer on that fixture. Then the script goes.
 
-**0b. The started-hook spike.** It runs on coldframe's own runner, so no other repository or its workflows are touched. A spike pull request (a draft, closed, never merged) adds a job with `timeout-minutes: 1`. For the spike only, the runner's `.env` gets a started hook that records what it sees and then waits.
+**0b. The started-hook spike.** coldframe is public, so it gets no runner on the owner's Mac. The spike runs instead on a runner of the private notes repository, jahala/coldframe-notes, so no other project or its workflows are touched. A spike pull request there (a draft, closed, never merged) adds a job with `timeout-minutes: 1`. For the spike only, the runner's `.env` gets a started hook that records what it sees and then waits.
 - Questions it answers:
   - Does a started hook block the job?
   - Does its wait count toward `timeout-minutes`?
@@ -183,5 +183,5 @@ Which test holds each guardrail, and which slice lands it, is in `docs/engineeri
 
 ## Questions for the owner
 
-1. **Deleting runner files for good.** Prune uses `trash` until you decide. With Finder's 30-day Trash setting off, the space frees only when you empty the Trash. The recommendation stands: a stated exception, limited by code to runner-made files inside `~/actions-runner-*`. The disk is less urgent than the review found (191 GB free), so this can wait until step 1c. The same answer covers the test runner: today, each run of `scripts/hygiene.sh` moves one killed run's folder to the Trash (`docs/decisions.md` 6). The recommendation is that the exception also covers coldframe's own test-run folders.
+1. **Deleting runner files for good.** Prune uses `trash` until you decide. With Finder's 30-day Trash setting off, the space frees only when you empty the Trash. The recommendation stands: a stated exception, limited by code to runner-made files inside `~/actions-runner-*`. The disk is less urgent than the review found (191 GB free), so this can wait until step 1c. The same answer covers the test runner: today, each run of `scripts/hygiene.sh` on your Mac moves one killed run's folder to the Trash (`docs/decisions.md` 6). The recommendation is that the exception also covers coldframe's own test-run folders.
 2. **The `.coldframe/times.json` question** comes at step 4, not now.
