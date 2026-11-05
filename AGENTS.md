@@ -38,12 +38,16 @@ The language is Rust, as one binary: hooks run in the runner's session with noth
 
 ## Tests
 
-| Command | What it checks | When | Measured |
-|---|---|---|---|
-| `scripts/test.sh` | the whole suite, then that the run left nothing behind | every change | 0.2 s once built (1.3 s with the build), load average 11 to 15 on 18 cores, 2026-11-05 |
-| `scripts/hygiene.sh` | a run killed part-way leaves nothing after the next run | every change, in CI | 0.8 s once built, same conditions |
+The suite runs in under a second, so every change runs all of it. A changed-only selection waits until the suite passes 30 seconds.
 
-CI also runs `cargo fmt --check`, `cargo clippy --locked --all-targets -- -D warnings` and `shellcheck scripts/*.sh` (`docs/engineering.md`, "Where CI runs"). The suite is small, so every change runs all of it.
+| Moment | Command | What it runs | Measured |
+|---|---|---|---|
+| Every pull request | `scripts/test.sh`, then `scripts/hygiene.sh` | the whole suite, then a run killed part-way, each failing if anything is left behind | 0.2 to 0.5 s warm, about 3 s from a cold build as CI builds; 0.3 to 0.6 s for the killed run |
+| A pull request touching what a heavy test measures | none yet | heavy tests arrive with slices 1b, 3a and 5d, each with its own command | |
+| The main line after each merge | the same as every pull request, on the push to master | everything | |
+| A release | none yet: the owner tags, then `cargo install --locked --git` at the tag on a clean machine | | |
+
+Measured 2026-11-05 on the owner's Mac (18 cores, load average 9 to 18 from other work): 20 runs of the suite and 5 of the killed run, then the same with 18 busy loops added. None failed. CI's time from push to verdict is not measured yet, because coldframe has no runner. CI also runs `cargo fmt --check`, `cargo clippy --locked --all-targets -- -D warnings` and `shellcheck scripts/*.sh` (`docs/engineering.md`, "Where CI runs"). The Rust version is `rust-toolchain.toml`, which CI and every checkout read.
 
 ## Hard limits
 

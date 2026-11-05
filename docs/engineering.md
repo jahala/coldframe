@@ -10,6 +10,8 @@ How coldframe is written and tested. The test commands and their measured times 
 - **A guard is proved by breaking it once.** Remove or weaken the guarded thing, watch its test fail, restore it, and say so in the pull request.
 - **Tests hold on a loaded machine.** They wait for the event, never a fixed time. A deadline only catches a hang. Time, ids, the home folder and every root folder are passed in. No test claims a fixed port, name or path.
 - **The pre-flight rule.** Before a test spends anything or touches a real runner, its assumptions are listed and checked at $0 on real data, it is dry-run on 3 items with every raw output read, and only then are its bar and control fixed. The record goes in docs/preflight/, one file per slice, created with the first slice that needs one.
+- **A flaky test gets a root cause.** No retry, no skip, no looser assertion. Loop it until it fails and explain why.
+- **Heavy tests get their own command.** A test that needs a copy of a real runner folder, a loaded machine or the machine to itself is a separate test target with its own script, kept out of `scripts/test.sh`. It is never marked ignored: `tests/hard_limits.rs` refuses a skipped test.
 - **Output is clean.** A passing run prints only cargo's lines and the scripts' last line.
 
 ## A run leaves nothing behind
