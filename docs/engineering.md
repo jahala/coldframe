@@ -60,7 +60,7 @@ This table is the one home for which check holds each rule. "Nothing yet" names 
 The job runs, in order, stopping at the first failure:
 1. `cargo fmt --check`
 2. `cargo clippy --locked --all-targets -- -D warnings`
-3. `shellcheck scripts/*.sh`
+3. `shellcheck scripts/*.sh`, with shellcheck 0.11.0 installed first and checked against its SHA-256, because GitHub's macOS image has none
 4. `scripts/test.sh`
 5. `scripts/hygiene.sh`
 
