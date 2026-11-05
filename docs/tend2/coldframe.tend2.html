@@ -8,7 +8,7 @@
 <noscript>This page renders its markdown payload with JavaScript. Enable JavaScript, or read the raw payload in the page source.</noscript>
 <script type="text/markdown" id="loop">
 # coldframe: the bench where a change's tests run before it goes out
-**Goal.** One tool owns how tests run on the owner's own Mac: the self-hosted runners there and the load they put on it, and test runs that leave nothing behind. The bet holds if, measured by [measure](measure.tend2.html) before and after, paid CI minutes stay at $0 a month, the slowest repository's heavy jobs wait less at the 90th percentile, runner disk stops growing week on week, and the projects' own "leave nothing behind" and "quiet machine" mechanisms come down to one, coldframe's. It is wrong if coldframe ends up larger than the scripts and mechanisms it replaced.
+**Goal.** One tool owns how tests run on a self-hoster's Mac: the self-hosted runners there and the load they put on it, and test runs that leave nothing behind. The bet is proven first on the owner's Mac, and holds if, measured by [measure](measure.tend2.html) before and after, paid CI minutes stay at $0 a month, the slowest repository's heavy jobs wait less at the 90th percentile, runner disk stops growing week on week, and the projects' own "leave nothing behind" and "quiet machine" mechanisms come down to one, coldframe's. It is wrong if coldframe ends up larger than the scripts and mechanisms it replaced.
 
 coldframe is one Rust binary, run by the runners' job hooks, by schedules the owner installs, and by hand; never a server, a daemon or a scheduler. The first milestone is six loops: [measure](measure.tend2.html) and [the started-hook spike](started-hook.tend2.html) decide whether a machine-wide cap is worth building; [status](status.tend2.html), [prune](prune.tend2.html) and [adopt](adopt.tend2.html) are the disk fix and the runners' health; [the run scope](run-scope.tend2.html) is "a run leaves nothing behind", written once. The pain they answer is on [the opportunity page](coldframe-opportunity.tend2.html).
 
@@ -30,7 +30,7 @@ coldframe is one Rust binary, run by the runners' job hooks, by schedules the ow
 - #run-scope
 
 ## For
-- #the-owner
+- #the-self-hoster
 - #the-building-agent
 
 ## Tried
@@ -39,6 +39,7 @@ coldframe is one Rust binary, run by the runners' job hooks, by schedules the ow
 - 2026-11-05 the foundations landed in pull request 1: the documents, a guard for each rule they state, test runs that leave nothing behind, and CI
 - 2026-11-05 published from a clean history on the owner's word, with CI on GitHub's hosted macOS runners and the evidence about the owner's machine in the private notes repository (docs/decisions.md 7)
 - 2026-11-05 the build plan became this map, on the owner's direction through plotplot-design; its first milestone is the six children, and the rest waits here until it is shaped (docs/decisions.md 8)
+- 2026-11-05 scope-out: teams. A team's CI Mac fits the self-hoster, except in two jobs coldframe does not serve yet: an alert that reaches a team, where coldframe posts a macOS notification nobody sees on a headless Mac, and runners registered to an organization, where coldframe reads only runners registered to one repository. The design leaves organizations for later, if ever (jahala/plotplot:docs/ideas/coldframe.md)
 - 2026-11-05 not shaped yet, in the design's order (jahala/plotplot:docs/ideas/coldframe.md): weighted slots, only if measure's kill criterion passes; `run --load` and the run scope's check for every project's suite; the test plan (declare, time, check plan, affected); the survey (cost, workflow traps, runner safety); `runner add` and `runner remove`; the skill and the pre-push guard. Each becomes a loop when it is decided, with its bar and control fixed at pre-flight
 </script>
 <script src="loop.js"></script>

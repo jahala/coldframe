@@ -2,18 +2,18 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>the-owner · coldframe</title>
+<title>the-self-hoster · coldframe</title>
 <link rel="stylesheet" href="loop.css">
 <body>
 <noscript>This page renders its markdown payload with JavaScript. Enable JavaScript, or read the raw payload in the page source.</noscript>
 <script type="text/markdown" id="loop">
-# the owner: many projects, one Mac, and tests that should not cost money
-**Who.** A person who builds many projects alone with agents, and runs their tests and CI on their own Mac to keep paid minutes near zero. Dozens of self-hosted runners share that Mac with the agents' own test runs, and the owner wants the machine to stay healthy without watching it.
+# the self-hoster: GitHub's runners on a Mac they look after, to stop paying for minutes
+**Who.** A person who runs GitHub's runners on a Mac they look after, their own or the one their team keeps for CI, so their tests stop costing paid minutes. They set the runners up once and want the machine to stay healthy without watching it. The first is the garden's owner: many projects, dozens of runners, and agents running their own tests on the same Mac.
 
 It is the end of a month. CI has stopped twice because the paid minutes ran out. A heavy job sat in the queue for ten minutes, then waited another nineteen for a quiet machine, to run five minutes of tests. The disk is filling with logs that nothing removes.
 
 ## Jobs
-- When CI runs on my Mac, I want the runners kept healthy and small without my attention, so the disk stops filling and a broken runner tells me before a job waits on it · from the CI review of 2026-10-29
+- When my runners have run for months, I want them kept healthy and small without my attention, so the disk stops filling and a broken runner tells me before a job waits on it · from the CI review of 2026-10-29
 - When many repositories' jobs land at once, I want the machine's load bounded as a whole, so heavy tests stop failing for want of ports and CPU · from the CI review of 2026-10-29
 - When a project's tests run, here or in CI, I want them to leave nothing behind and to hold on a loaded machine, so I write that rule once instead of in every project · from the six separate designs found on 2026-10-30
 - When I decide where a project's tests run, I want to know what CI costs and which workflows waste it, so paid minutes stay at zero · from the paid-minute stops of September and October 2026
