@@ -17,6 +17,9 @@
 - metric: the count of per-project "leave nothing behind" and "quiet machine" mechanisms, target one
 - risk: paid minutes run out mid-month and CI stops, as it did in September and October 2026
 
+## Why it persists
+Each project fixes what hurts it, inside its own repository, so the fixes multiply and none of them sees the whole machine. GitHub's runner never removes its own logs or old versions. CI jobs and agents' local test runs share one Mac with nothing bounding their total load, and no tool owns "a run leaves nothing behind" for more than one project.
+
 ## Solved by
 - #coldframe
 </script>
