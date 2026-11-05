@@ -1,0 +1,7 @@
+[package]
+name = "coldframe"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99.1"
+description = "The bench where a change's tests run before it goes out, on the owner's own machines."
+publish = false

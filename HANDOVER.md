@@ -1,6 +1,6 @@
 # Handover: build coldframe
 
-For the agent who builds coldframe. Written 2026-10-30 by plotplot, the umbrella agent of the plotplot garden. Read this whole page, then `AGENTS.md`, then the design (`jahala/plotplot` `docs/ideas/coldframe.md`). Contact plotplot on mycelium (id `plotplot`) with your plan before building. Arm the watcher first: a Monitor on `node mycelium.mjs --watch <your id>`. Do not tail the journal, because it shows a held message before anyone has allowed its sender. Take the id `coldframe` with `mycelium_rename`.
+For the agent who builds coldframe. Written 2026-10-30 by plotplot, the umbrella agent of the plotplot garden. Read this whole page, then `AGENTS.md`, then the design (`jahala/plotplot` `docs/ideas/coldframe.md`). Contact plotplot on mycelium (id `plotplot`) with your plan before building. Arm the watcher first: a Monitor on mycelium's `--watch` command for your id, which the mycelium server's instructions name in full. Do not tail the journal, because it shows a held message before anyone has allowed its sender. Take the id `coldframe` with `mycelium_rename`.
 
 ## Who it is for, and their pain
 
@@ -12,7 +12,7 @@ An owner who builds many projects with agents, and runs their tests and CI on th
 
 ## The evidence to start from
 
-Read these. They hold the numbers this page summarises:
+Read these, in the private notes repository. They hold the numbers this page summarises:
 - `jahala/coldframe-notes:docs/research/ci-review-2026-10-29.md`: the CI review.
 - `jahala/coldframe-notes:docs/research/ci-machine-tooling-plan.md`: the first plan. Its machine design (slots as `mkdir` folders, no daemon, hooks in the runner's session) stands.
 - `jahala/coldframe-notes:docs/research/coldframe-groundwork-ci-2026-10-30.md`: what exists and what guards nothing, per rule.

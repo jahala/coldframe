@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+# The repository is public, so every job runs on GitHub's hosted macOS runners, which are
+# free for public repositories, and never on a runner on the owner's machine
+# (docs/engineering.md, "Where CI runs"). On a pull request, the checkout is the change
+# merged into master, so the checks run on what the merge would make.
+
+jobs:
+  # Format, lints, the scripts' checker, the suite through scripts/test.sh, which fails when a
+  # run leaves anything behind, then scripts/hygiene.sh, which proves a killed run leaves
+  # nothing after the next one.
+  check:
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # rust-toolchain.toml names the version; with no argument rustup installs that one.
+      - run: rustup toolchain install
+      - run: cargo fmt --check
+      - run: cargo clippy --locked --all-targets -- -D warnings
+      # GitHub's macOS image has no shellcheck. This installs the release the owner's Mac runs,
+      # 0.11.0, and refuses it unless it matches the SHA-256 GitHub records for that file.
+      - name: Install shellcheck 0.11.0
+        run: |
+          curl -fsSL --max-time 60 -o "$RUNNER_TEMP/shellcheck.tar.gz" https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.darwin.aarch64.tar.gz
+          echo "339b930feb1ea764467013cc1f72d09cd6b869ebf1013296ba9055ab2ffbd26f  $RUNNER_TEMP/shellcheck.tar.gz" | shasum -a 256 -c -
+          tar -xzf "$RUNNER_TEMP/shellcheck.tar.gz" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/shellcheck-v0.11.0" >> "$GITHUB_PATH"
+      - run: shellcheck scripts/*.sh
+      - run: scripts/test.sh
+      - run: scripts/hygiene.sh
