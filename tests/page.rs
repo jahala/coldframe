@@ -95,9 +95,9 @@ fn counted_at(commit: &str) -> Vec<(String, u64)> {
         .count() as u64;
     vec![
         ("tests".to_string(), tests),
-        ("rules waiting for their guard".to_string(), waiting),
-        ("rules held by a check".to_string(), held),
         ("dependencies".to_string(), dependencies),
+        ("rules CI checks".to_string(), held),
+        ("rules written, not yet checked".to_string(), waiting),
     ]
 }
 

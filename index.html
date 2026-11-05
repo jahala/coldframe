@@ -463,9 +463,9 @@ coldframe: not a command: status
       <h2 class="label" id="proof-title">coldframe 0.1.0, as it stands <span class="pb-at">· commit 09dc195 · 5 nov 2026</span></h2>
       <dl class="figures">
         <div><dt>tests</dt><dd>21</dd></div>
-        <div><dt>rules waiting for their guard</dt><dd>9</dd></div>
-        <div><dt>rules held by a check</dt><dd>10</dd></div>
         <div><dt>dependencies</dt><dd>0</dd></div>
+        <div><dt>rules CI checks</dt><dd>10</dd></div>
+        <div><dt>rules written, not yet checked</dt><dd>9</dd></div>
       </dl>
     </div>
   </section>
@@ -487,14 +487,14 @@ coldframe: not a command: status
       <li>run a self-hosted runner on a public repository</li>
       <li>spend money</li>
       <li>delete what a runner or a run did not make</li>
-      <li>write a pass</li>
+      <li>mark its own work as passed</li>
     </ul>
   </div></section>
 
   <section class="wrap" id="how" aria-labelledby="how-title"><div class="sec g12">
     <p class="label margin">the commands</p>
     <div class="content rise">
-      <h2 id="how-title">Six commands, one binary</h2>
+      <h2 id="how-title">Six commands, to come</h2>
       <ol class="faces">
         <li class="face"><span class="n" aria-hidden="true">1</span><p class="cmd"><span>coldframe</span> status</p><p class="what">says whether CI on this Mac is healthy: every runner online, busy or idle, its disk use, and the last prune. It exits non-zero when not.</p></li>
         <li class="face"><span class="n" aria-hidden="true">2</span><p class="cmd"><span>coldframe</span> prune</p><p class="what">moves old runner logs, superseded runner versions and update leftovers to the Trash, one idle runner at a time.</p></li>
@@ -539,7 +539,7 @@ coldframe: not a command: status
       <li><a class="sit" href="https://jahala.github.io/weeder/"><span class="plate" style="--bloom:var(--pp-weeder);--on:var(--sign-dark)">11</span><span><b>weeder judges the diff, and coldframe runs the tests that remain</b><span class="label">the shed · the judge</span></span></a></li>
       <li><div class="sit"><span class="plate soon" style="--bloom:var(--pp-tend)">06</span><span><b>a tend verify script reads its exit code and its leak report</b><span class="label">build · plan and verify</span></span></div></li>
       <li><div class="sit"><span></span><span><b>every runner's job hooks</b><span class="label">hook started · hook completed</span></span></div></li>
-      <li><div class="sit"><span></span><span><b>a LaunchAgent you install</b><span class="label">prune daily · survey weekly</span></span></div></li>
+      <li><div class="sit"><span></span><span><b>a daily and weekly schedule on your Mac</b><span class="label">prune daily · survey weekly</span></span></div></li>
     </ul>
   </div></section>
 </main>
@@ -585,7 +585,6 @@ coldframe: not a command: status
           <span style="--bloom:var(--pp-mycelium)"><span class="gf-dot"></span>mycelium</span>
           <a href="https://jahala.github.io/weeder/" style="--bloom:var(--pp-weeder)"><span class="gf-dot"></span>weeder</a>
           <span style="--bloom:var(--pp-well)"><span class="gf-dot"></span>well</span>
-          <a href="#top" style="--bloom:var(--pp-coldframe)" class="is-current" aria-current="page"><span class="gf-dot"></span>coldframe</a>
         </nav>
         <p class="gf-soft">small, sharp tools for building with agents.</p>
       </div>
