@@ -4,12 +4,12 @@ How coldframe is written and tested. The test commands and their measured times 
 
 ## Testing doctrine
 
-- **The failing test comes first.** A slice starts as a test that fails for the reason the slice exists.
+- **The failing test comes first.** A loop's work starts as a test that fails for the reason the loop exists.
 - **Real values, never mocks.** The core is driven with real values recorded from this machine. The edge is driven with real temporary folders and real processes. A copy of a runner folder never carries `.credentials` or `.credentials_rsaparams`.
 - **A check that reads text proves itself.** Each detector in `tests/` is shown a sample it must flag and one it must pass.
 - **A guard is proved by breaking it once.** Remove or weaken the guarded thing, watch its test fail, restore it, and say so in the pull request.
 - **Tests hold on a loaded machine.** They wait for the event, never a fixed time. A deadline only catches a hang. Time, ids, the home folder and every root folder are passed in. No test claims a fixed port, name or path.
-- **The pre-flight rule.** Before a test spends anything or touches a real runner, its assumptions are listed and checked at $0 on real data, it is dry-run on 3 items with every raw output read, and only then are its bar and control fixed. The record goes in docs/preflight/, one file per slice, created with the first slice that needs one.
+- **The pre-flight rule.** Before a test spends anything or touches a real runner, its assumptions are listed and checked at $0 on real data, it is dry-run on 3 items with every raw output read, and only then are its bar and control fixed. The record goes in docs/preflight/, one file per loop, created with the first loop that needs one.
 - **A flaky test gets a root cause.** No retry, no skip, no looser assertion. Loop it until it fails and explain why.
 - **Heavy tests get their own command.** A test that needs a copy of a real runner folder, a loaded machine or the machine to itself is a separate test target with its own script, kept out of `scripts/test.sh`. It is never marked ignored: `tests/hard_limits.rs` refuses a skipped test.
 - **Output is clean.** A passing run prints only cargo's lines and the scripts' last line.
@@ -23,19 +23,19 @@ How coldframe is written and tested. The test commands and their measured times 
 
 ## Rules and their guards
 
-This table is the one home for which check holds each rule. "Nothing yet" names the slice that lands the guard (`docs/build-plan.md`). When a guard lands, its row changes in the same pull request.
+This table is the one home for which check holds each rule. "Nothing yet" names the loop on the map (`docs/tend2/`) that lands the guard, or says the work is not shaped yet. When a guard lands, its row changes in the same pull request.
 
 | Rule (where it is stated) | Held by | State |
 |---|---|---|
-| Guardrail 1: changes no project's tests, workflows, hooks or lock (`AGENTS.md`) | every command run against a project copy, whose tree must not change | nothing yet: 2a, and again in 6a |
-| Guardrail 2: deletes only runner-made or scope-made files, with `trash` | `tests/hard_limits.rs` (no deletion call in `src/`); later, a user file planted in a runner's `_diag` and beside the runner folder both survive prune | partly: no deletion code exists; the prune test lands in 1b and 1c |
-| Guardrail 3: never restarts a busy runner | a real process named `Runner.Worker` under a copied folder blocks `adopt` | nothing yet: 1d |
-| Guardrail 4: a slot can slow CI, never stall it | a slot held by a dead process is reclaimed; a full cap lets the job run after the ceiling | nothing yet: 5a |
-| Guardrail 5: hooks never call GitHub or read a key | hooks run with a `gh` on PATH that records any call, and an empty home folder | nothing yet: 1d and 5b |
-| Guardrail 6: refuses a self-hosted runner on a public repository | `runner add` refuses on a recorded public repository's answer | nothing yet: 7b |
-| Guardrail 7: spends nothing | the one door to GitHub refuses any endpoint not on its list | nothing yet: 1a and 6c |
+| Guardrail 1: changes no project's tests, workflows, hooks or lock (`AGENTS.md`) | every command run against a project copy, whose tree must not change | nothing yet: run-scope, and again in the survey, not shaped yet |
+| Guardrail 2: deletes only runner-made or scope-made files, with `trash` | `tests/hard_limits.rs` (no deletion call in `src/`); later, a user file planted in a runner's `_diag` and beside the runner folder both survive prune | partly: no deletion code exists; the prune test lands with prune |
+| Guardrail 3: never restarts a busy runner | a real process named `Runner.Worker` under a copied folder blocks `adopt` | nothing yet: adopt |
+| Guardrail 4: a slot can slow CI, never stall it | a slot held by a dead process is reclaimed; a full cap lets the job run after the ceiling | nothing yet: slots, not shaped yet |
+| Guardrail 5: hooks never call GitHub or read a key | hooks run with a `gh` on PATH that records any call, and an empty home folder | nothing yet: adopt, and the started hook with slots |
+| Guardrail 6: refuses a self-hosted runner on a public repository | `runner add` refuses on a recorded public repository's answer | nothing yet: runner add, not shaped yet |
+| Guardrail 7: spends nothing | the one door to GitHub refuses any endpoint not on its list | nothing yet: status, and the survey, not shaped yet |
 | Guardrail 8: its own data has a lifetime | a test per store in `docs/architecture.md`, "Data and its lifetime" | partly: test runs, by `scripts/test.sh` and `scripts/hygiene.sh`; the rest land with each store |
-| Never writes "pass" (`AGENTS.md`, "What coldframe is not") | no command's output carries a pass verdict | nothing yet: 2a |
+| Never writes "pass" (`AGENTS.md`, "What coldframe is not") | no command's output carries a pass verdict | nothing yet: run-scope |
 | Delete with `trash`, never `rm` (hard limits) | `tests/hard_limits.rs` for coldframe's code; the owner's hedge policy for agents | held |
 | Never `git reset`, never force-push, never touch the stash | the owner's hedge policy, outside this repository | held outside |
 | Never echo a secret | the owner's hedge policy, outside this repository | held outside |
@@ -57,7 +57,7 @@ This table is the one home for which check holds each rule. "Nothing yet" names 
 
 ## Where CI runs
 
-`.github/workflows/ci.yml` runs two jobs on GitHub's hosted macOS runners. The repository is public, so those cost nothing, and it never runs on a runner on the owner's Mac, where a stranger's pull request would run code as the owner. macOS, because coldframe reads macOS runner folders and LaunchAgents. On a pull request the checkout is the change merged into master, so the checks run on what the merge would make.
+`.github/workflows/ci.yml` runs three jobs on GitHub's hosted macOS runners. The repository is public, so those cost nothing, and it never runs on a runner on the owner's Mac, where a stranger's pull request would run code as the owner. macOS, because coldframe reads macOS runner folders and LaunchAgents. On a pull request the checkout is the change merged into master, so the checks run on what the merge would make.
 
 The `check` job runs, in order, stopping at the first failure:
 1. `cargo fmt --check`
@@ -66,7 +66,7 @@ The `check` job runs, in order, stopping at the first failure:
 4. `scripts/test.sh`
 5. `scripts/hygiene.sh`
 
-The `page` job checks the project page against the brand (below, "The project page").
+The `page` job checks the project page against the brand (below, "The project page"). The `map` job lints the tend2 map with tend2 built from the tend commit the owner's installed tend2 runs, read through a read-only deploy key stored as the `TEND_DEPLOY_KEY` secret.
 
 Each job's time limit is 60 minutes, though both run in under a minute. The limit only catches a hang. On 2026-11-05 a 15-minute limit cancelled a run that was still waiting for a free runner, so the wait for a runner counts against it.
 

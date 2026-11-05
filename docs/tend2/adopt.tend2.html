@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>adopt · coldframe</title>
+<link rel="stylesheet" href="loop.css">
+<body>
+<noscript>This page renders its markdown payload with JavaScript. Enable JavaScript, or read the raw payload in the page source.</noscript>
+<script type="text/markdown" id="loop">
+# adopt: every runner under coldframe's hooks, and none restarted while busy
+**Goal.** `coldframe runner adopt` points every runner's completed hook at `coldframe hook completed`, which clears the job's checkout as the runners' `after-job.sh` does today, and restarts each runner only while it is idle, since a runner reads its `.env` only when it starts. A runner with no hook gets one. The hooks never call GitHub and never read a key.
+
+## Tests
+- [ ] (code) `hook completed` leaves the same tree as `after-job.sh` on identical copies of a dirty checkout, and touches nothing outside the runner's work folder · tests/hooks.rs
+- [ ] (code) the hooks run with an empty home folder and a `gh` on the path that records any call, and neither is touched · tests/hooks.rs
+- [ ] (code) on copied runner folders, adopt points every idle one's `.env` at coldframe's hooks and restarts it once, while a copy under a live process named `Runner.Worker` is not restarted and its `.env` is unchanged · tests/adopt.rs
+- [ ] (human) after adopt on the owner's Mac, every runner's `.env` names coldframe's hooks, the one that had no hook included
+
+## Needs
+- #status
+
+## For
+- #the-owner
+
+## Tried
+- 2026-11-05 if a hook must be a script file rather than the binary, the hook is a two-line script that runs the binary, which needs the owner's word before it ships; the started-hook spike answers which
+</script>
+<script src="loop.js"></script>

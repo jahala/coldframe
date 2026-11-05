@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>started-hook · coldframe</title>
+<link rel="stylesheet" href="loop.css">
+<body>
+<noscript>This page renders its markdown payload with JavaScript. Enable JavaScript, or read the raw payload in the page source.</noscript>
+<script type="text/markdown" id="loop">
+# started-hook: what a runner's started hook can and cannot do
+**Goal.** Before slots are built, a spike on one runner answers what the design guesses: whether a started hook can hold a job back, whether its wait counts toward the job's `timeout-minutes`, which variables it sees, and whether the job's labels are among them, which decides how a job's weight reaches the hook. It runs on a runner of the private notes repository, so no project's workflows change and no public repository gets a runner on the owner's Mac.
+
+## Tests
+- [ ] (human) the spike's report, in the notes repository, records for one runner whether a started hook blocks the job, whether its wait counts toward `timeout-minutes`, the names of the variables it sees, whether the job's labels are among them, and whether a `caffeinate` it starts survives the runner's cleanup
+
+## For
+- #the-owner
+
+## Tried
+- 2026-11-05 moved from coldframe's own runner to the notes repository's when coldframe went public (docs/decisions.md 7); plotplot registers that runner when the spike is ready
+- 2026-11-05 the hook records variable names, and values only for a short list that holds no secret; the runner's `.env` is restored after, and the runner restarted only while idle
+</script>
+<script src="loop.js"></script>

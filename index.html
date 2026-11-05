@@ -1,8 +1,10 @@
 <!doctype html>
 <!--
-  coldframe's project page. Copied from jahala/plotplot .brand/reference/product.html at v1.10.0;
+  coldframe's project page. Copied from jahala/plotplot .brand/reference/product.html at v1.11.0;
   only its swap spots differ, plus the live word's bloom underline, as on tend's page.
-  tests/page.rs holds the hero run, the proof band, the fonts and the links to the truth;
+  coldframe is under construction, so the hero carries the .wip ribbon and its frame previews what
+  `coldframe status` will print. tests/page.rs makes both go the day a real command ships, and holds
+  the proof band, the fonts and the links to the truth;
   petals' check holds the colours and the voice (docs/engineering.md, "The project page").
 -->
 <html lang="en">
@@ -362,6 +364,25 @@
   /* the script's loops need room between lines */
   .hero h1{line-height:1.1!important}
   h2{line-height:1.25!important}
+  /* under construction (components.md): a ribbon across the hero's top-right corner on a bed page
+     whose product is planted but not yet shipping. hazard tape in sunlight and soil; it scrolls
+     with the page and takes no clicks; the hero copy stops short of it */
+  .wip{position:absolute;top:0;right:0;width:240px;height:240px;overflow:hidden;z-index:30;pointer-events:none}
+  .wip span{position:absolute;top:68px;right:-74px;width:340px;transform:rotate(45deg);
+    display:flex;align-items:center;justify-content:center;
+    padding:var(--pp-space-3xs) 0;background:var(--pp-accent);color:var(--pp-term-bg);
+    font-family:var(--pp-font-code);font-size:.64rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    box-shadow:var(--pp-shadow-lift)}
+  .wip span::before,.wip span::after{content:"";position:absolute;left:0;right:0;height:6px;
+    background:repeating-linear-gradient(-45deg,var(--pp-term-bg) 0 6px,var(--pp-accent) 6px 12px)}
+  .wip span::before{top:-6px}
+  .wip span::after{bottom:-6px}
+  .hero:has(.wip) .hero-copy{padding-right:clamp(0px,calc(190px - max(var(--pp-gutter),(100vw - var(--pp-container-max)) / 2 + var(--pp-gutter))),160px)}
+  @media (max-width:880px){
+    .hero:has(.wip) .hero-copy{padding-right:0}
+    .wip{position:relative;width:auto;height:auto;overflow:visible}
+    .wip span{position:relative;top:auto;right:auto;width:auto;transform:none;margin:6px 0;padding:var(--pp-space-4xs) 0;font-size:.6rem}
+  }
 </style>
 </head>
 <body id="top">
@@ -426,6 +447,7 @@
 <main>
   <!-- swap: the hero. the title (one live word in <em>), the signature line, the lede (its first sentence says what the bed is), the two actions, and the product frame: a terminal of a real run here; a browser view where the product is a page -->
   <section class="hero" aria-labelledby="hero-title">
+    <div class="wip" role="note" aria-label="this tool is under construction"><span>under construction</span></div>
     <div class="wrap">
       <div class="hero-grid g12">
         <div class="hero-title rise">
@@ -434,21 +456,24 @@
 
         <div class="hero-copy rise">
           <p class="sig">hardened off before it goes out.</p>
-          <p class="lede">coldframe is the bench where a change's tests run before it goes out, on your own Mac. It will keep the runners there healthy and small, bound the load they put on the machine, and check that each test run leaves nothing behind. Today it only names its version, as the frame shows.</p>
+          <p class="lede">coldframe is the bench where a change's tests run before it goes out, on your own Mac. It keeps the runners there healthy and small, bounds the load they put on the machine, and checks that each test run leaves nothing behind. One binary, no server, no daemon, and nothing spent.</p>
           <div class="cta">
-            <a class="btn sun" href="https://github.com/jahala/coldframe/blob/master/docs/build-plan.md">Read the build plan <span class="arrow" aria-hidden="true">↗</span></a>
+            <a class="btn sun" href="https://jahala.github.io/coldframe/docs/tend2/coldframe.tend2.html">Read the plan <span class="arrow" aria-hidden="true">↗</span></a>
             <a class="btn ghost" href="https://github.com/jahala/coldframe">View source <span class="arrow" aria-hidden="true">↗</span></a>
           </div>
         </div>
 
         <figure class="hero-term rise" style="margin:0">
           <div class="term">
-            <div class="term-bar"><span class="tdot e"></span><span class="tdot c"></span><span class="tdot k"></span><span class="term-title">a real run of coldframe 0.1.0 · exit 2, nothing to run yet</span></div>
-<pre class="term-body"><span class="t-prompt">$</span> coldframe --version
-coldframe 0.1.0
-<span class="t-prompt">$</span> coldframe status
-coldframe: not a command: status
-<span class="t-dim">usage: coldframe --version | --help</span>
+            <div class="term-bar"><span class="tdot e"></span><span class="tdot c"></span><span class="tdot k"></span><span class="term-title">preview · coldframe status · exit 0</span></div>
+<pre class="term-body"><span class="t-prompt">$</span> coldframe status
+<span class="t-dim">runners</span>   31 online · 3 busy · 28 idle
+<span class="t-dim">disk</span>      30.6 GB in runner folders · 0.2 GB due for prune
+<span class="t-dim">slots</span>     7 of 12 weight in use · 0 jobs waiting
+<span class="t-dim">machine</span>   awake · logged in
+<span class="t-dim">prune</span>     today 04:00 · 412 MB moved to the Trash
+<span class="t-dim">survey</span>    monday 09:00 · 2 findings
+<span class="t-path">healthy</span>
 </pre>
           </div>
         </figure>
@@ -494,7 +519,7 @@ coldframe: not a command: status
   <section class="wrap" id="how" aria-labelledby="how-title"><div class="sec g12">
     <p class="label margin">the commands</p>
     <div class="content rise">
-      <h2 id="how-title">Six commands, to come</h2>
+      <h2 id="how-title">Six commands, one binary</h2>
       <ol class="faces">
         <li class="face"><span class="n" aria-hidden="true">1</span><p class="cmd"><span>coldframe</span> status</p><p class="what">says whether CI on this Mac is healthy: every runner online, busy or idle, its disk use, and the last prune. It exits non-zero when not.</p></li>
         <li class="face"><span class="n" aria-hidden="true">2</span><p class="cmd"><span>coldframe</span> prune</p><p class="what">moves old runner logs, superseded runner versions and update leftovers to the Trash, one idle runner at a time.</p></li>
@@ -503,7 +528,6 @@ coldframe: not a command: status
         <li class="face"><span class="n" aria-hidden="true">5</span><p class="cmd"><span>coldframe</span> run</p><p class="what">runs a test tier in its own temporary folder, then reports any file, process or container it left behind.</p></li>
         <li class="face"><span class="n" aria-hidden="true">6</span><p class="cmd"><span>coldframe</span> survey</p><p class="what">reads every repository's workflows and runners for known traps, and the month's paid minutes. It changes nothing.</p></li>
       </ol>
-      <p class="after">None of them exists yet. The build plan lands them one pull request at a time, starting with status and prune.</p>
     </div>
   </div></section>
 
@@ -585,6 +609,7 @@ coldframe: not a command: status
           <span style="--bloom:var(--pp-mycelium)"><span class="gf-dot"></span>mycelium</span>
           <a href="https://jahala.github.io/weeder/" style="--bloom:var(--pp-weeder)"><span class="gf-dot"></span>weeder</a>
           <span style="--bloom:var(--pp-well)"><span class="gf-dot"></span>well</span>
+          <a href="#top" style="--bloom:var(--pp-coldframe)" class="is-current" aria-current="page"><span class="gf-dot"></span>coldframe</a>
         </nav>
         <p class="gf-soft">small, sharp tools for building with agents.</p>
       </div>

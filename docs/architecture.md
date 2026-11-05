@@ -7,7 +7,7 @@ coldframe is one Rust binary. It runs from a runner's job hooks, from LaunchAgen
 The core decides, and the edge does the I/O.
 
 - **The core** is every file under `src/` except the edge. Its functions take data and return data: which slot to take, what to prune, what a run left behind, which survey findings hold. It does not touch the disk, the clock, the environment, the process table, the network or the terminal.
-- **The edge** is `src/main.rs`, and the files under src/edge/ once the first command that reads the machine lands (slice 1a). It reads what the core needs, passes it in, and acts on the answer: it prints, moves files to the Trash, starts and stops processes, and calls `gh`.
+- **The edge** is `src/main.rs`, and the files under src/edge/ once the first command that reads the machine lands (the status loop). It reads what the core needs, passes it in, and acts on the answer: it prints, moves files to the Trash, starts and stops processes, and calls `gh`.
 - **Time, the home folder and every root folder are passed in.** The core never asks for today's date or for `~`. Tests pass their own.
 - **One door to GitHub.** Every `gh` call will go through one edge function with a list of the endpoints it may call. Job hooks never reach it.
 
@@ -15,16 +15,16 @@ The core decides, and the edge does the I/O.
 
 ## Built so far
 
-Only the command's conventions: `coldframe --version` and `coldframe --help`. `src/lib.rs` reads the arguments and `src/main.rs` prints the answer. The commands arrive in the slices of `docs/build-plan.md`, and each one joins the usage line in `src/lib.rs`.
+Only the command's conventions: `coldframe --version` and `coldframe --help`. `src/lib.rs` reads the arguments and `src/main.rs` prints the answer. The commands arrive in the order of the map, `docs/tend2/coldframe.tend2.html`, and each one joins the usage line in `src/lib.rs`.
 
 ## Exit codes
 
 | Code | Meaning | From |
 |---|---|---|
 | 0 | done, or healthy | now |
-| 1 | unhealthy, or the run it watched failed or left something behind | slice 1a |
+| 1 | unhealthy, or the run it watched failed or left something behind | status |
 | 2 | a usage error; nothing is written | now |
-| 3 | coldframe could not read what it needs, so it cannot say healthy or not | slice 1a |
+| 3 | coldframe could not read what it needs, so it cannot say healthy or not | status |
 
 A failure to read is never reported as healthy or unhealthy. `tests/cli.rs` holds codes 0 and 2.
 
@@ -36,16 +36,16 @@ A failure to read is never reported as healthy or unhealthy. `tests/cli.rs` hold
 
 ## Data and its lifetime
 
-Every store that grows says what it keeps and what removes the rest. The rule lands with the store, in the same slice, with a test.
+Every store that grows says what it keeps and what removes the rest. The rule lands with the store, in the same pull request, with a test.
 
 | Store | Where | Keeps | Removed by | Lands in |
 |---|---|---|---|---|
-| Prune record | `~/Library/Application Support/coldframe/prune.json` | the latest prune's outcome only | each prune overwrites it | 1c |
-| Logs | `~/Library/Logs/coldframe/` | 30 days | `prune` | 1c |
-| Slots | `~/Library/Application Support/coldframe/slots/` | at most the slot count | `hook completed`; a dead holder's slot is reclaimed | 5a |
-| Survey reports | `~/Library/Application Support/coldframe/survey/` | the last 12 | `survey`, as it writes the 13th | 6 |
-| Measured times | a project's .coldframe/times.json | the latest per tier | `time` overwrites it | 4b |
-| Config | `~/.config/coldframe/config.toml` | the owner's settings | the owner | 1c |
+| Prune record | `~/Library/Application Support/coldframe/prune.json` | the latest prune's outcome only | each prune overwrites it | prune |
+| Logs | `~/Library/Logs/coldframe/` | 30 days | `prune` | prune |
+| Slots | `~/Library/Application Support/coldframe/slots/` | at most the slot count | `hook completed`; a dead holder's slot is reclaimed | slots, not shaped yet |
+| Survey reports | `~/Library/Application Support/coldframe/survey/` | the last 12 | `survey`, as it writes the 13th | survey, not shaped yet |
+| Measured times | a project's .coldframe/times.json | the latest per tier | `time` overwrites it | time, not shaped yet |
+| Config | `~/.config/coldframe/config.toml` | the owner's settings | the owner | prune |
 | Test runs | `$TMPDIR/coldframe-tests/run-<pid>/` | one run's temporary files | the run itself; a killed run's by the next run | now |
 
 ## Dependencies

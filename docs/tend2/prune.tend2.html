@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>prune · coldframe</title>
+<link rel="stylesheet" href="loop.css">
+<body>
+<noscript>This page renders its markdown payload with JavaScript. Enable JavaScript, or read the raw payload in the page source.</noscript>
+<script type="text/markdown" id="loop">
+# prune: each runner's files kept within their lifetimes
+**Goal.** `coldframe prune` moves to the Trash runner logs older than 7 days, runner versions the runner no longer points to, and update leftovers, one idle runner at a time, and coldframe's own logs older than 30 days. It never touches a busy runner, never a file a runner did not make, and says what it moved and why. It records its outcome, and [status](status.tend2.html) turns red when the last prune failed or is older than 2 days.
+
+## Tests
+- [ ] (code) on a copy of a real runner folder, the dry-run lists exactly the logs dated older than 7 days, the superseded runner versions and the update leftovers, and leaves a file planted in its log folder and one planted beside the runner folder · tests/prune.rs · reads: tests/fixtures/runners/
+- [ ] (code) prune moves to the Trash only what its dry-run listed, and skips a copied runner under a live process named `Runner.Worker` · tests/prune.rs
+- [ ] (code) a prune broken on purpose turns status red, and a sound prune leaves it healthy · tests/prune.rs
+- [ ] (human) run on every runner on the owner's Mac, each folder's measured size dropped by its dry-run prediction within 1 percent, while a copied folder prune did not run on kept its size; the record is in the notes repository
+- [ ] (human) the owner states whether prune may delete runner-made files for good, or keeps moving them to the Trash, where they free no space until the Trash is emptied
+
+## Needs
+- #status
+
+## For
+- #the-owner
+
+## Tried
+- 2026-11-05 counted by hand at $0: about 8.5 GB prunable across the 31 runners, logs older than 7 days 3.9 GB, superseded versions 2.5 GB on 5 runners, update leftovers 2.1 GB on the same 5
+- 2026-11-05 a real `bin` or `externals` folder is always the current version; only a link marks the others as superseded
+</script>
+<script src="loop.js"></script>

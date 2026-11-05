@@ -1,7 +1,9 @@
 //! The project page, `index.html`, says only what is true (docs/engineering.md, "Rules and
 //! their guards"):
 //! - its hero terminal shows a real run: each `$ coldframe ...` line, run now, prints the
-//!   lines that follow it;
+//!   lines that follow it. While coldframe is under construction, the frame may instead preview
+//!   a command not built yet, titled "preview", beside the under-construction ribbon;
+//! - the ribbon stays exactly until the first real command ships;
 //! - its proof band's four numbers are what the repository held at the commit the band names;
 //! - it loads the brand's three fonts and nothing else;
 //! - every outside address it links is on the list of public ones.
@@ -124,8 +126,9 @@ const FONTS: &str = "https://fonts.googleapis.com/css2?family=Protest+Riot&famil
 
 /// Outside addresses the page may link: coldframe's own, the garden's public pages and
 /// repositories, the brand's fonts, and the support link.
-const PUBLIC: [&str; 12] = [
+const PUBLIC: [&str; 13] = [
     "https://github.com/jahala/coldframe",
+    "https://jahala.github.io/coldframe",
     "https://github.com/jahala/plotplot",
     "https://github.com/jahala/mrkd",
     "https://plotplot.ai",
@@ -186,31 +189,77 @@ fn the_readers_find_what_they_look_for() {
         ("abc1234".to_string(), vec![("tests".to_string(), 21)])
     );
     assert!(is_public(
-        "https://github.com/jahala/coldframe/blob/master/docs/build-plan.md"
+        "https://jahala.github.io/coldframe/docs/tend2/coldframe.tend2.html"
     ));
     assert!(!is_public("https://github.com/jahala/coldframe-notes"));
     assert!(!is_public("https://example.com/"));
 }
 
+fn coldframe(args: &[String]) -> std::process::Output {
+    Command::new(env!("CARGO_BIN_EXE_coldframe"))
+        .args(args)
+        .output()
+        .expect("coldframe runs")
+}
+
+/// The commands the binary has shipped: the words of its usage line that are neither a flag,
+/// the program's name, nor punctuation.
+fn shipped_commands() -> Vec<String> {
+    let usage = String::from_utf8_lossy(&coldframe(&["--help".to_string()]).stdout).to_string();
+    usage
+        .split_whitespace()
+        .filter(|word| !["usage:", "coldframe", "|"].contains(word) && !word.starts_with("--"))
+        .map(str::to_string)
+        .collect()
+}
+
+fn has_ribbon(page: &str) -> bool {
+    page.contains("<div class=\"wip\"")
+}
+
 #[test]
-fn the_hero_terminal_shows_a_real_run() {
+fn the_hero_terminal_shows_a_real_run_or_previews_one_not_built_yet() {
     let page = page();
+    let title =
+        plain(between(&page, "<span class=\"term-title\">", "</span>").expect("no frame title"));
     let terminal =
         plain(between(&page, "<pre class=\"term-body\">", "</pre>").expect("no hero terminal"));
     let shown = runs(&terminal);
     assert!(!shown.is_empty(), "the hero terminal shows no run");
-    for (args, expected) in shown {
-        let out = Command::new(env!("CARGO_BIN_EXE_coldframe"))
-            .args(&args)
-            .output()
-            .expect("coldframe runs");
-        let printed = format!(
-            "{}{}",
-            String::from_utf8_lossy(&out.stdout),
-            String::from_utf8_lossy(&out.stderr)
+    let preview = title.starts_with("preview");
+    if preview {
+        assert!(
+            has_ribbon(&page),
+            "a preview stands only beside the under-construction ribbon"
         );
-        assert_eq!(printed, expected, "coldframe {args:?}");
     }
+    for (args, expected) in shown {
+        let out = coldframe(&args);
+        if preview {
+            assert!(
+                out.status.code() == Some(2)
+                    && String::from_utf8_lossy(&out.stderr).contains("not a command"),
+                "coldframe {args:?} exists now, so the frame shows its real run, not a preview"
+            );
+        } else {
+            let printed = format!(
+                "{}{}",
+                String::from_utf8_lossy(&out.stdout),
+                String::from_utf8_lossy(&out.stderr)
+            );
+            assert_eq!(printed, expected, "coldframe {args:?}");
+        }
+    }
+}
+
+#[test]
+fn the_ribbon_stays_until_the_first_real_command_ships() {
+    let shipped = shipped_commands();
+    assert_eq!(
+        has_ribbon(&page()),
+        shipped.is_empty(),
+        "the under-construction ribbon goes the day a real command ships; shipped: {shipped:?}"
+    );
 }
 
 #[test]

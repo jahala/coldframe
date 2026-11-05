@@ -56,7 +56,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: jahala/plotplot
-          ref: ce4d307b06a91add01dc7299bca852e32a264694 # v1.10.0, the version .petalsrc pins
+          ref: 7fb34239dc5423f9f6cae1ff6ca39bb823711bd5 # v1.11.0, the version .petalsrc pins
           path: .plotplot
       - name: Fetch the brand and lay coldframe's layer over it
         run: |
@@ -64,3 +64,26 @@ jobs:
           cp -R .brand/products/coldframe/. "$RUNNER_TEMP/brand/products/coldframe/"
       - run: bash .plotplot/petals/scripts/check.sh index.html --brand "$RUNNER_TEMP/brand" --product coldframe
       - run: python3 .plotplot/petals/scripts/marks.py --check --brand "$RUNNER_TEMP/brand"
+
+  # The map lint, with tend2 built from jahala/tend at the commit the owner's installed tend2
+  # runs (docs/decisions.md 8). jahala/tend is private, so the checkout reads it with a
+  # read-only deploy key.
+  map:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: jahala/tend
+          ref: 484ffdf0359bfd70b0420699e2f3770b4e9ccfbd
+          ssh-key: ${{ secrets.TEND_DEPLOY_KEY }}
+          path: .tend
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+      - name: Build tend2
+        run: npm ci && npm run build
+        working-directory: .tend
+      - run: node .tend/dist/cli.js lint --strict docs/tend2

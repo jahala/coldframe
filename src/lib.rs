@@ -2,7 +2,7 @@
 //! files under `src/edge/`) reads the disk, the clock, the process table and `gh`, and passes
 //! what it read in here (docs/architecture.md, "Shape").
 
-/// The usage line every usage error prints. Commands join it as their slices land.
+/// The usage line every usage error prints. Commands join it as they land.
 pub const USAGE: &str = "usage: coldframe --version | --help";
 
 /// What one invocation asks for, read from its arguments, the program name left out.

@@ -4,7 +4,9 @@ Each decision with its context, what was chosen and why. Numbered in order, neve
 
 ## 1. Build in slices, one pull request at a time
 
-2026-11-05. The design's build order has eight steps, some too big for one review. Each step is cut into slices in `docs/build-plan.md`, and each slice is one pull request with its failing test first. One pull request is open at a time. A step waits only for the steps it depends on, so step 1 (prune and status) does not wait for step 0 (measure and spike). plotplot ruled this on 2026-11-05: the design's "step 1 does not wait on step 0" wins over the handover's "each step lands before the next".
+Replaced in part by decision 8: the plan's home is now the tend2 map, and its slices are the map's capabilities. One pull request at a time still holds.
+
+2026-11-05. The design's build order has eight steps, some too big for one review. Each step is cut into slices in a build plan, and each slice is one pull request with its failing test first. One pull request is open at a time. A step waits only for the steps it depends on, so step 1 (prune and status) does not wait for step 0 (measure and spike). plotplot ruled this on 2026-11-05: the design's "step 1 does not wait on step 0" wins over the handover's "each step lands before the next".
 
 ## 2. Step 2's known cases: mull for files, and graft replaced
 
@@ -26,7 +28,7 @@ Replaced by decision 7: a public repository gets no runner on the owner's Mac.
 
 ## 6. A killed test run is cleaned by the next run, through the Trash
 
-2026-11-05. A run killed outright cannot remove its own temporary folder. The next run of `scripts/test.sh` moves the folder of any earlier run whose process is gone to the Trash. It uses `trash`, not `rm`, because the folder is not one that run made itself, and the hard limit allows `rm` only for that. `scripts/hygiene.sh` kills a run part-way to prove it, in CI as well. If `trash` fails in a runner's session, that check fails loudly, and this decision is revisited. The cost: each run of the check on the owner's Mac adds one small folder to the owner's Trash (CI's hosted runners are thrown away after each job), and Finder's 30-day setting is off, so nothing removes it. The owner's answer to open question 1 in `docs/build-plan.md` settles this as well.
+2026-11-05. A run killed outright cannot remove its own temporary folder. The next run of `scripts/test.sh` moves the folder of any earlier run whose process is gone to the Trash. It uses `trash`, not `rm`, because the folder is not one that run made itself, and the hard limit allows `rm` only for that. `scripts/hygiene.sh` kills a run part-way to prove it, in CI as well. If `trash` fails in a runner's session, that check fails loudly, and this decision is revisited. The cost: each run of the check on the owner's Mac adds one small folder to the owner's Trash (CI's hosted runners are thrown away after each job), and Finder's 30-day setting is off, so nothing removes it. The owner's answer to the open question on the map's bench page, whether prune may delete for good, settles this as well.
 
 ## 7. coldframe is public, from a clean history, and its CI runs on GitHub
 
@@ -36,3 +38,11 @@ Replaced by decision 7: a public repository gets no runner on the owner's Mac.
 - **Nothing private in the public repository.** `tests/public.rs` fails on a path on the owner's machine or the name of a private project. Evidence about the owner's machine goes to the notes repository.
 - **CI never runs on the owner's Mac.** `tests/workflow.rs` refuses a self-hosted runner, so guardrail 6 holds for coldframe itself.
 - **What it costs.** The started-hook spike (step 0b) needs a self-hosted runner, and cannot use coldframe's own. It moves to a runner on the private notes repository. plotplot confirmed this on 2026-11-05, and registers that runner when step 0b is ready.
+
+## 8. The plan lives on the tend2 map, and the page shows the finished tool
+
+2026-11-05. The owner, through plotplot-design, asked for coldframe's work to be planned in tend2, like the garden's other tools, and for the project page to describe the finished tool under an "under construction" ribbon.
+
+- **The map replaces the build plan.** `docs/tend2/` holds a project loop, a persona, an opportunity and one loop per piece of the first milestone: measure, the started-hook spike, status, prune, adopt and the run scope. Each loop's bar and control are in its checks' claims. Work not decided yet waits in the project loop's `## Tried`, since the map holds only decided bets. The build plan and its slice names are gone.
+- **The installed tend2 lints the map.** The handover pinned tend at `c17ed38` and forbade the installed `tend2`. On 2026-11-05 the installed one was tend's newest commit, `484ffdf`, six weeks ahead of that pin, and the owner asked why the old one was being built. Local lints use the installed `tend2`, and CI pins `484ffdf` so both read the map alike.
+- **The page shows the finished tool, honestly.** The hero's frame previews what `coldframe status` will print, titled "preview", beside the ribbon. `tests/page.rs` fails the day a real command ships while the ribbon or the preview is still there.

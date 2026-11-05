@@ -4,7 +4,7 @@
 
 It is one binary. There is no server and no daemon: the runners' job hooks run it, LaunchAgents you install run it, and you run it by hand.
 
-**Status: foundations only.** The binary builds, checks its own rules and names its version. Its commands arrive one at a time, in the order of [the build plan](docs/build-plan.md).
+**Status: under construction.** The binary builds, checks its own rules and names its version. Its commands land one at a time, in the order of [the map](https://jahala.github.io/coldframe/docs/tend2/coldframe.tend2.html).
 
 ```
 $ coldframe --version

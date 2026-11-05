@@ -5,7 +5,7 @@ coldframe is the bench where a change's tests run before it goes out. It owns ho
 Read first, in this order:
 1. This page.
 2. `HANDOVER.md`: the brief, the first milestone and the build order.
-3. `docs/build-plan.md`: the build order cut into slices, one pull request each.
+3. `docs/tend2/coldframe.tend2.html`: the map. Each loop is one piece of work with the checks that prove it, and `tend2 next docs/tend2` says what comes next.
 4. `docs/architecture.md` (the shape, exit codes and data lifetimes), `docs/engineering.md` (the testing doctrine, and which check holds each rule) and `docs/decisions.md`.
 5. The design: `jahala/plotplot:docs/ideas/coldframe.md`.
 6. The garden's law: `jahala/plotplot:CLAUDE.md` and `jahala/plotplot:docs/building-the-garden.md`.
@@ -21,7 +21,7 @@ Read first, in this order:
 
 ## Guardrails
 
-Each one gets a test that breaks it once. `docs/engineering.md`, "Rules and their guards", names the test, or the slice that lands it.
+Each one gets a test that breaks it once. `docs/engineering.md`, "Rules and their guards", names the test, or the loop on the map that lands it.
 
 1. It changes no project's tests, workflows, hooks or lock.
 2. It deletes only what a runner made inside `~/actions-runner-*`, or what a `run` scope created, and it says which. It uses `trash` by default. Deleting for good waits for the owner's stated exception.
@@ -43,7 +43,7 @@ The suite runs in under a second, so every change runs all of it. A changed-only
 | Moment | Command | What it runs | Measured |
 |---|---|---|---|
 | Every pull request | `scripts/test.sh`, then `scripts/hygiene.sh` | the whole suite, then a run killed part-way, each failing if anything is left behind | 0.2 to 0.5 s warm, about 3 s from a cold build as CI builds; 0.3 to 0.6 s for the killed run |
-| A pull request touching what a heavy test measures | none yet | heavy tests arrive with slices 1b, 3a and 5d, each with its own command | |
+| A pull request touching what a heavy test measures | none yet | heavy tests arrive with the prune, load and slot work, each with its own command | |
 | The main line after each merge | the same as every pull request, on the push to master | everything | |
 | A release | none yet: the owner tags, then `cargo install --locked --git` at the tag on a clean machine | | |
 
@@ -64,3 +64,15 @@ Measured 2026-11-05 on the owner's Mac (18 cores, load average 9 to 18 from othe
 Every change is a branch and a pull request, a failing test first, every CI job green, then a merge. This repository is public, so its CI runs on GitHub's hosted macOS runners, which cost nothing for a public repository. It never gets a runner on the owner's Mac: a stranger's pull request would run code there (guardrail 6). `tests/workflow.rs` holds this.
 
 Nothing private goes in this repository: no path on the owner's machine, and no name of the owner's private projects (`tests/public.rs`). The garden's own tools may be named, as the public umbrella names them. Evidence about the owner's machine and repositories (the research copies, measure reports, spike notes) goes to the private notes repository, jahala/coldframe-notes.
+
+<!-- tend2:begin -->
+## tend2: this project plans on loops
+
+- Orient first: `tend2 next docs/tend2` says what is next, what is running, what needs the owner and what went stale.
+- Nothing is built that is not a loop first: shape the goal and its checks on the map before any code.
+- Only `tend2 verify` writes a pass. Never tick a box by hand: a bare [x] renders as claimed, not proven.
+- A loop is done when every check on it carries a verified pass, and not one commit sooner.
+- Record decisions, scope-outs and dead ends in the loop's `## Tried`, which only grows.
+- The map holds bets, not maybes. An idea for a loop waits in its `## Tried`; a free-standing idea waits in docs/ideas/.
+- The by-laws are `docs/tend2/practices.md`: lessons this repository earned, each citing the `## Tried` lines that paid for it.
+<!-- tend2:end -->

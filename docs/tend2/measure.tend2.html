@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>measure · coldframe</title>
+<link rel="stylesheet" href="loop.css">
+<body>
+<noscript>This page renders its markdown payload with JavaScript. Enable JavaScript, or read the raw payload in the page source.</noscript>
+<script type="text/markdown" id="loop">
+# measure: the job timeline that every before-and-after claim stands on
+**Goal.** `coldframe measure --since 14d` draws the CI job timeline per repository and for the whole machine, minute by minute: jobs queued against jobs running. It is the instrument for every claim the project loop makes, and its first answer decides whether a machine-wide cap is worth building: if CI ran above the cap (6 jobs, a third of the cores) in under 5 percent of busy minutes, the cap changes nothing and slots are not built.
+
+## Tests
+- [ ] (code) on the jobs recorded over the CI review's window, measure reproduces the review's hand count for the heaviest project's heavy jobs, about 10 minutes queued and up to 19 minutes waiting for a quiet machine, each within one minute · tests/measure.rs · reads: tests/fixtures/measure/
+- [ ] (code) a minute with no job running is never counted busy, and a job queued across midnight is counted once, in both days' minutes · tests/measure.rs
+- [ ] (human) the 14-day report, kept in the private notes repository, states the share of busy minutes above the cap, and the owner and plotplot read the slots decision from it
+
+## For
+- #the-owner
+
+## Tried
+- 2026-11-05 the handover asks for this first as a script, before the binary carries it; the binary's version then has to give the script's answer on the same recorded jobs
+- 2026-11-05 the recorded jobs name the owner's private repositories, so the fixture this repository keeps replaces each name with a letter, and the full report lives in the notes repository
+</script>
+<script src="loop.js"></script>
