@@ -126,7 +126,7 @@ const FONTS: &str = "https://fonts.googleapis.com/css2?family=Protest+Riot&famil
 
 /// Outside addresses the page may link: coldframe's own, the garden's public pages and
 /// repositories, the brand's fonts, and the support link.
-const PUBLIC: [&str; 16] = [
+const PUBLIC: [&str; 17] = [
     "https://github.com/jahala/coldframe",
     "https://jahala.github.io/coldframe",
     "https://github.com/jahala/plotplot",
@@ -139,6 +139,7 @@ const PUBLIC: [&str; 16] = [
     "https://jahala.github.io/mycelium/",
     "https://jahala.github.io/petals/",
     "https://jahala.github.io/well/",
+    "https://jahala.github.io/copeca/",
     "https://buymeacoffee.com/jahala",
     "https://fonts.googleapis.com",
     "https://fonts.gstatic.com",
