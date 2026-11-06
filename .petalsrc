@@ -3,6 +3,6 @@
 # of .brand/ is fetched with petals' fetch-brand.sh at this version and git-ignored.
 brand:
   source: https://github.com/jahala/plotplot.git
-  version: v1.11.1
+  version: v1.15.0
   product: coldframe
   overrides: {}
