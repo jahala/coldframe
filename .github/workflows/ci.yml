@@ -56,7 +56,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: jahala/plotplot
-          ref: 6837d9e82dae324f4549531702caf35bc782d9b8 # v1.14.1, the version .petalsrc pins
+          ref: 790bfcf55166708caafb34285c0a3b8b7843be5e # v1.15.0, the version .petalsrc pins
           path: .plotplot
       - name: Fetch the brand and lay coldframe's layer over it
         run: |
